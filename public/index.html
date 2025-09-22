@@ -36,7 +36,7 @@
     }).addTo(map);
 
     // Load external GeoJSON (make sure points.geojson is in the same folder as index.html or in /data/)
-    fetch('public/points.geojson')
+    fetch('points.geojson')
       .then(res => res.json())
       .then(data => {
         const layer = L.geoJSON(data, {
