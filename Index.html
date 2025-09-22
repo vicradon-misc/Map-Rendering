@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Custom Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
+    html,body { height:100%; margin:0; }
+    #map { height:100vh; width:100%; }
+    .leaflet-container { font: 14px/1.2 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  </style>
+</head>
+<body>
+  <div id="map" aria-label="Interactive map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- keep the same head and map container as above -->
+<script>
+  const map = L.map('map').setView([9.0820, 8.6753], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+
+  // Load external GeoJSON
+  fetch('data/points.geojson')
+    .then(res => res.json())
+    .then(data => {
+      const layer = L.geoJSON(data, {
+        onEachFeature: (f, l) => {
+          if (f.properties && f.properties.popup) l.bindPopup(`<strong>${f.properties.name||''}</strong><br>${f.properties.popup}`);
+        }
+      }).addTo(map);
+
+      const b = layer.getBounds();
+      if (b.isValid && b.isValid()) map.fitBounds(b.pad(0.1));
+    })
+    .catch(err => {
+      console.error('Failed to load GeoJSON', err);
+    });
+</script>
+
+
+
+
+
+</body>
+</html>
