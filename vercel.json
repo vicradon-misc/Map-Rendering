@@ -1,0 +1,6 @@
+{
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "points.geojson", "use": "@vercel/static" }
+  ]
+}
